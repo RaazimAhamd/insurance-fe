@@ -1,0 +1,309 @@
+.customer-management {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Inline Filter Header */
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+
+  .btn-add-inline {
+    background: #004080;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  input,
+  select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Table Scroll Management */
+.table-wrapper {
+  flex-grow: 1;
+  overflow-y: auto;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.customer-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  bottom: 10px;
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: #004080;
+    color: white;
+    z-index: 10;
+    padding: 12px;
+    text-align: left;
+    font-size: 0.85rem;
+  }
+
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  tbody tr:hover {
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+}
+
+/* Action Buttons */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+}
+
+/* Restored Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 60vh;
+  overflow-y: auto;
+
+  h3 {
+    color: #004080;
+    margin-bottom: 1rem;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  input,
+  select {
+    padding: 8px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+  }
+}
+
+.document-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.thumb {
+  position: relative;
+  width: 80px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 4px;
+  text-align: center;
+
+  .thumb-img {
+    width: 100%;
+    height: 60px;
+    object-fit: cover;
+  }
+
+  .pdf-icon {
+    height: 60px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .file-name {
+    font-size: 10px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    color: blue;
+    cursor: pointer;
+  }
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 1.5rem;
+
+  button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .btn-submit {
+    background: #004080;
+    color: white;
+  }
+
+  .btn-cancel {
+    background: #aaa;
+    color: white;
+  }
+
+  .download {
+    border: 1px solid blue;
+    color: blue;
+    background: white;
+  }
+}
+
+/* Mobile Styling */
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+
+  .mobile-only {
+    display: block;
+    padding: 10px;
+  }
+
+  .filter-header {
+    flex-wrap: wrap;
+
+    .btn-add-inline {
+      width: 100%;
+    }
+  }
+
+  .modal-content {
+    padding: 1rem;
+    width: 100%;
+    max-width: 300px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .customer-card {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .customer-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+
+    button {
+      flex: 1;
+      padding: 6px;
+      border-radius: 4px;
+      border: none;
+      color: white;
+      font-weight: bold;
+    }
+
+    .btn-edit-mobile {
+      background: #1976d2;
+    }
+
+    .btn-delete-mobile {
+      background: #d32f2f;
+    }
+  }
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  /* Frosted glass effect */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.export {
+  color: rgb(101, 176, 225);
+  text-decoration: underline;
+  font-style: italic;
+  font-weight: 600;
+}

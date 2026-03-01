@@ -1,0 +1,44 @@
+<div class="app">
+  <aside class="sidebar" [class.active]="sidebarActive">
+    <div class="logo">Insure Lead</div>
+    <nav>
+      <ul>
+        <li [class.active]="selected === 'dashboard'" (click)="select('dashboard')">Dashboard</li>
+        <li [class.active]="selected === 'customer'" (click)="select('customer')">Customers</li>
+        <li class="d-none" [class.active]="selected === 'policies'" (click)="select('policies')">Policies</li>
+        <li class="d-none" [class.active]="selected === 'commissions'" (click)="select('commissions')">Commissions</li>
+        <li (click)="common.logout()">Logout</li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Overlay for mobile -->
+  <ng-container *ngIf="sidebarActive">
+    <div class="overlay" (click)="toggleSidebar()"></div>
+  </ng-container>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <header class="topbar">
+      <div class="hamburger" (click)="toggleSidebar()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="user-info">Hello, Telecaller</div>
+    </header>
+
+    <section class="content">
+      <!-- Dynamic views -->
+      <ng-container *ngIf="selected === 'dashboard'">
+        <app-dashboard-view></app-dashboard-view>
+      </ng-container>
+
+      <ng-container *ngIf="selected === 'customer'">
+        <app-customer-management></app-customer-management>
+      </ng-container>
+
+      <!-- You can add more components for policies and commissions -->
+    </section>
+  </main>
+</div>

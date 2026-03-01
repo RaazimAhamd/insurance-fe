@@ -1,0 +1,27 @@
+<div class="login-container">
+    <h2>Insure Lead</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <label for="username">Username</label>
+        <input type="text" id="username" formControlName="username" autocomplete="off" />
+
+        <label for="password">Password</label>
+        <input [type]="hidePassword ? 'password' : 'text'" id="password" formControlName="password" />
+
+        <div class="error-msg" *ngIf="submitted && f['username'].invalid">
+            Username is required
+        </div>
+        <div class="error-msg" *ngIf="submitted && f['password'].invalid">
+            Password is required
+        </div>
+        <div class="error-msg" *ngIf="errorMsg">
+            {{ errorMsg }}
+        </div>
+
+        <button type="submit" [disabled]="loading">
+           <span *ngIf="!loading"> Sign in </span>
+            <span *ngIf="loading" class="spinner"></span>
+        </button>
+
+    </form>
+</div>

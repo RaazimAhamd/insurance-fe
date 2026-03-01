@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+.d-none {
+    display: none !important;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 99vh;    /* Force exact screen height */
+  width: 100vw;     /* Force exact screen width */
+  overflow: hidden; /* STOP the main browser scrollbar */
+}

@@ -1,0 +1,153 @@
+<div *ngIf="loading" class="loader-overlay">
+  <div class="loader-content text-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+
+    <div class="progress mt-3" style="width: 200px; height: 10px;">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+    </div>
+
+    <p class="mt-2 text-secondary fw-bold">Processing your request...</p>
+  </div>
+</div>
+
+<div class="customer-management">
+  <div class="filter-header">
+    <button class="btn-add-inline" (click)="openModal('add')">+ Add</button>
+    <input type="text" placeholder="Search Name, Contact, Vehicle..." [(ngModel)]="searchText"
+      (input)="applyFilters()" />
+    <select [(ngModel)]="sortBy" (change)="applyFilters()">
+      <option value="">Sort By</option>
+      <option value="addedDesc">Added Date (Newest)</option>
+      <option value="addedAsc">Added Date (Oldest)</option>
+      <option value="policyAsc">Policy Expire Date (Asc)</option>
+      <option value="policyDesc">Policy Expire Date (Desc)</option>
+      <option value="nameAsc">Name (A → Z)</option>
+      <option value="nameDesc">Name (Z → A)</option>
+    </select>
+    <select [(ngModel)]="vehicleFilter" (change)="applyFilters()">
+      <option value="">All Vehicles</option>
+      <option *ngFor="let v of vehicleTypes" [value]="v">{{ v }}</option>
+    </select>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="customer-table desktop-only">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Vehicle No.</th>
+          <th>Contact No.</th>
+          <th>Policy No.</th>
+          <th>Policy Expire Date</th>
+          <th>Vehicle Type</th>
+          <th style="width: 100px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cust of filteredCustomers; let i = index">
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.customerName }}</td>
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.vehicleNo }}</td>
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.contactNo }}</td>
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.policyNo }}</td>
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.policyExpireDate }}</td>
+          <td (click)="openModal('view', i); this.currId = cust._id">{{ cust.vehicleType }}</td>
+          <td class="action-cell">
+            <button class="icon-btn edit" (click)="openModal('edit', i);this.currId = cust._id" title="Edit">✏️</button>
+            <button class="icon-btn delete" (click)="deleteCustomer(cust._id);this.currId = cust._id"
+              title="Delete">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="mobile-only">
+      <div class="customer-card" *ngFor="let cust of filteredCustomers; let i = index">
+        <div class="customer-info" (click)="openModal('view', i);this.currId = cust._id">
+          <h3>{{ cust.customerName }}</h3>
+          <p>Vehicle: {{ cust.vehicleType }} ({{ cust.vehicleNo }})</p>
+          <p>Contact: {{ cust.contactNo }}</p>
+        </div>
+        <div class="customer-actions">
+          <button class="btn-edit-mobile" (click)="openModal('edit', i);this.currId = cust._id">Edit</button>
+          <button class="btn-delete-mobile" (click)="deleteCustomer(cust._id);this.currId = cust._id">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <h3>
+        {{ modalMode === 'add' ? 'Add Customer' : modalMode === 'edit' ? 'Edit Customer' : 'View Customer' }}
+      </h3>
+      <form [formGroup]="customerForm" (ngSubmit)="saveCustomer()">
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" formControlName="customerName" [readonly]="modalMode==='view'" maxlength="50" />
+        </div>
+        <div class="form-group">
+          <label>Vehicle No.</label>
+          <input type="text" formControlName="vehicleNo" [readonly]="modalMode==='view'" maxlength="10" />
+        </div>
+        <div class="form-group">
+          <label>Contact No. (enter number only)</label>
+          <input type="tel" formControlName="contactNo" [readonly]="modalMode==='view'" [maxlength]="13" />
+        </div>
+        <div class="form-group">
+          <label>Alt Contact No. (enter number only)</label>
+          <input type="tel" formControlName="altContactNo" [readonly]="modalMode==='view'" [maxlength]="13" />
+        </div>
+        <div class="form-group">
+          <label>Policy No.</label>
+          <input type="text" formControlName="policyNo" [readonly]="modalMode==='view'" />
+        </div>
+        <div class="form-group">
+          <label>Policy Expire Date</label>
+          <input type="date" formControlName="policyExpireDate" [readonly]="modalMode==='view'" />
+        </div>
+        <div class="form-group d-none">
+          <label>Current Date & Time</label>
+          <input type="text" formControlName="currentDateTime" readonly />
+        </div>
+        <div class="form-group">
+          <label>Vehicle Type</label>
+          <select formControlName="vehicleType" [disabled]="modalMode==='view'">
+            <option value="" disabled>Select Vehicle Type</option>
+            <option *ngFor="let v of vehicleTypes" [value]="v">{{ v }}</option>
+          </select>
+        </div>
+
+        <div class="form-group" *ngIf="modalMode !== 'view'">
+          <label>Upload Documents</label>
+          <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png" (change)="onFileSelected($event)" />
+        </div>
+
+        <div class="document-preview">
+          <div class="thumb" *ngFor="let file of filePreviews; let i = index">
+            <button type="button" (click)="downloadFile(file)" class="file-name">
+              {{ file.file?.name || file.name }}
+            </button>
+            <br>
+            <span class="remove-btn" *ngIf="modalMode !== 'view'" (click)="removeFile(i)">✖</span>
+            <img *ngIf="file.type === 'image'" [src]="file.url || common.getFileUrl(file.url)" class="thumb-img"
+              (click)="viewFile(file)" />
+            <div *ngIf="file.type === 'pdf'" class="pdf-icon" (click)="viewFile(file)">📄</div>
+          </div>
+        </div>
+
+        <div class="modal-actions" *ngIf="modalMode!=='view'">
+          <button type="submit" class="btn-submit">{{ modalMode==='add' ? 'Add' : 'Update' }}</button>
+          <button type="button" class="btn-cancel" (click)="closeModal()">Cancel</button>
+        </div>
+
+        <div class="modal-actions" *ngIf="modalMode==='view'">
+          <button type="button" class="download" (click)="downloadAll(currId)">Download all</button>
+          <button type="button" class="btn-cancel" (click)="closeModal()">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div style="text-align: right;">
+    <span class="export" (click)="export()">export</span>
+  </div>
+</div>
